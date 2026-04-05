@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="FlowBoard — A modern Kanban workspace for personal productivity and project tracking." />
+  <meta name="keywords" content="kanban, productivity, task management, pomodoro" />
+  <title>FlowBoard — Kanban Workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+          <rect x="2" y="2" width="12" height="12" rx="3" fill="url(#g1)"/>
+          <rect x="18" y="2" width="12" height="12" rx="3" fill="url(#g2)" opacity="0.7"/>
+          <rect x="2" y="18" width="12" height="12" rx="3" fill="url(#g2)" opacity="0.7"/>
+          <rect x="18" y="18" width="12" height="12" rx="3" fill="url(#g1)"/>
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#8b5cf6"/>
+              <stop offset="100%" stop-color="#60a5fa"/>
+            </linearGradient>
+            <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#60a5fa"/>
+              <stop offset="100%" stop-color="#8b5cf6"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="logo-text">FlowBoard</span>
+      </div>
+      <button class="sidebar-toggle" id="sidebarToggle" title="Collapse sidebar" aria-label="Toggle sidebar">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Main navigation">
+      <button class="nav-item active" data-view="board" id="navBoard" aria-current="page">
+        <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
+          <rect x="2" y="2" width="6" height="16" rx="2" fill="currentColor" opacity="0.8"/>
+          <rect x="11" y="2" width="7" height="7" rx="2" fill="currentColor"/>
+          <rect x="11" y="12" width="7" height="6" rx="2" fill="currentColor" opacity="0.5"/>
+        </svg>
+        <span class="nav-label">Board</span>
+      </button>
+      <button class="nav-item" data-view="stats" id="navStats">
+        <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
+          <rect x="2" y="10" width="3" height="8" rx="1" fill="currentColor" opacity="0.5"/>
+          <rect x="7" y="6" width="3" height="12" rx="1" fill="currentColor" opacity="0.7"/>
+          <rect x="12" y="3" width="3" height="15" rx="1" fill="currentColor"/>
+          <rect x="17" y="8" width="1" height="10" rx="0.5" fill="currentColor" opacity="0.4"/>
+        </svg>
+        <span class="nav-label">Analytics</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-stats" aria-label="Quick stats">
+      <div class="stat-pill">
+        <span class="stat-pill-value" id="sidebarTotal">0</span>
+        <span class="stat-pill-label">Total</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-pill-value done" id="sidebarDone">0</span>
+        <span class="stat-pill-label">Done</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-pill-value overdue" id="sidebarOverdue">0</span>
+        <span class="stat-pill-label">Overdue</span>
+      </div>
+    </div>
+
+    <div class="timer-widget" id="timerWidget">
+      <div class="timer-header">
+        <span class="timer-title">Focus Timer</span>
+        <span class="timer-badge" id="timerSession">Session 1</span>
+      </div>
+      <div class="timer-ring-wrap">
+        <svg class="timer-svg" viewBox="0 0 108 108" aria-hidden="true">
+          <circle class="timer-track" cx="54" cy="54" r="46"/>
+          <circle class="timer-arc" id="timerArc" cx="54" cy="54" r="46"
+            stroke-dasharray="289.03" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-inner">
+          <div class="timer-display" id="timerDisplay" aria-live="polite" aria-label="Timer">25:00</div>
+          <div class="timer-phase" id="timerPhase">Focus</div>
+        </div>
+      </div>
+      <div class="timer-controls">
+        <button class="timer-btn" id="timerReset" title="Reset timer" aria-label="Reset timer">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 7a5 5 0 1 0 1-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M2 3v4h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="timer-btn timer-btn-main" id="timerStart" title="Start timer" aria-label="Start timer">
+          <svg class="icon-play" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M4 2l8 5-8 5V2z" fill="currentColor"/>
+          </svg>
+          <svg class="icon-pause hidden" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <rect x="3" y="2" width="3" height="10" rx="1" fill="currentColor"/>
+            <rect x="8" y="2" width="3" height="10" rx="1" fill="currentColor"/>
+          </svg>
+        </button>
+        <button class="timer-btn" id="timerSkip" title="Skip phase" aria-label="Skip to next phase">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 3l7 4-7 4V3z" fill="currentColor" opacity="0.6"/>
+            <rect x="11" y="3" width="1.5" height="8" rx="0.75" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle color theme">
+        <svg class="theme-icon" id="themeIconSun" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="3.5" fill="currentColor"/>
+          <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M11.54 4.46L10.13 5.87M3.05 12.95l1.41-1.41" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        <svg class="theme-icon hidden" id="themeIconMoon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M13 8.5A5.5 5.5 0 1 1 7.5 3a4 4 0 0 0 5.5 5.5z" fill="currentColor"/>
+        </svg>
+        <span class="theme-label" id="themeLabel">Light mode</span>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main" id="main">
+
+    <div class="view" id="boardView">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1 class="page-title">My Workspace</h1>
+          <span class="page-sub" id="taskCount">0 tasks</span>
+        </div>
+        <div class="topbar-right">
+          <div class="search-wrap">
+            <svg class="search-ico" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <input type="text" class="search-input" id="searchInput"
+              placeholder="Search tasks…" aria-label="Search tasks" maxlength="80" />
+          </div>
+          <select class="filter-select" id="priorityFilter" aria-label="Filter by priority">
+            <option value="">All priorities</option>
+            <option value="high">🔴 High</option>
+            <option value="medium">🟡 Medium</option>
+            <option value="low">🟢 Low</option>
+          </select>
+          <button class="btn-primary" id="newTaskBtn">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            New Task
+          </button>
+        </div>
+      </header>
+
+      <div class="board-columns" id="boardColumns" role="region" aria-label="Kanban board"></div>
+    </div>
+
+    <div class="view hidden" id="statsView">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1 class="page-title">Analytics</h1>
+          <span class="page-sub">Your productivity at a glance</span>
+        </div>
+      </header>
+      <div class="stats-grid" id="statsGrid" role="region" aria-label="Analytics"></div>
+    </div>
+
+  </main>
+
+  <div class="modal-overlay hidden" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal" id="taskModal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">New Task</h2>
+        <button class="modal-close" id="modalClose" aria-label="Close modal">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <form class="modal-form" id="taskForm" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="taskTitle">Title <span class="req">*</span></label>
+          <input type="text" class="form-input" id="taskTitle"
+            placeholder="What needs to be done?" maxlength="80" autocomplete="off" />
+          <span class="form-error" id="titleError" role="alert"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="taskDescription">Description</label>
+          <textarea class="form-textarea" id="taskDescription"
+            placeholder="Add more context or notes…" rows="3" maxlength="500"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="taskPriority">Priority</label>
+            <select class="form-select" id="taskPriority">
+              <option value="low">🟢 Low</option>
+              <option value="medium" selected>🟡 Medium</option>
+              <option value="high">🔴 High</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="taskColumn">Column</label>
+            <select class="form-select" id="taskColumn">
+              <option value="todo">To Do</option>
+              <option value="inprogress">In Progress</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="taskDueDate">Due Date</label>
+          <input type="date" class="form-input" id="taskDueDate" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="taskTags">Tags</label>
+          <input type="text" class="form-input" id="taskTags"
+            placeholder="frontend, bug, design  (comma separated)" maxlength="120" autocomplete="off" />
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" id="cancelBtn">Cancel</button>
+          <button type="submit" class="btn-primary" id="submitBtn">Create Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="deleteOverlay" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h2 class="modal-title" id="deleteModalTitle">Delete Task</h2>
+        <button class="modal-close" id="deleteClose" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <p class="delete-msg">Are you sure you want to delete "<strong id="deleteTaskName"></strong>"? This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn-ghost" id="deleteCancelBtn">Cancel</button>
+        <button class="btn-danger" id="deleteConfirmBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="storage.js"></script>
+  <script src="utils.js"></script>
+  <script src="board.js"></script>
+  <script src="timer.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
