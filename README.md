@@ -2,7 +2,7 @@
 
 A fully client-side Kanban productivity app built with vanilla HTML, CSS, and JavaScript — no frameworks, no dependencies.
 
-🌟 **[Live Demo](https://your-github-username.github.io/flowboard/)** 🌟
+🌟 **[Live Demo](https://xxyxzz.github.io/flowboard/)** 🌟
 
 ![FlowBoard screenshot](./screenshot.png)
 
